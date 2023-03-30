@@ -47,11 +47,8 @@ public class SecurityConfig {
 //                .hasAnyRole("ADMIN")
 
 //                .antMatchers("/user/**")
-                .antMatchers("/user/**").permitAll()
-//                .hasAnyRole("USER")
-//
-//                .antMatchers("/login/**")
-
+                .antMatchers("/user/login", "/user/register").permitAll()
+                .antMatchers().hasAnyRole("USER")
 //                .permitAll()
 
                 .anyRequest()

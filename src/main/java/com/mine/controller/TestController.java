@@ -14,9 +14,8 @@ public class TestController {
     @Autowired
     UserRepository userRepository;
     @GetMapping("/index")
-    public String getTest(@RequestParam(required = false) String email, @RequestParam(required = false) int id){
-        User user = userRepository.findUserByEmail("hien@gmail.com");
-        User userId = userRepository.findUserById(id);
-        return "";
+    public String getTest(){
+        User user = userRepository.findUserById(1);
+        return user.toString();
     }
 }
