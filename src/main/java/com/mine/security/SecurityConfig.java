@@ -1,10 +1,12 @@
 package com.mine.security;
 
 import com.mine.jwt.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
+//@Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
     UserDetailServiceSecurity userDetailServiceSecurity;
 
@@ -48,11 +50,11 @@ public class SecurityConfig {
 
 //                .antMatchers("/user/**")
                 .antMatchers("/user/login", "/user/register").permitAll()
-                .antMatchers().hasAnyRole("USER")
+//                .antMatchers("/post/get").hasAnyRole("USER")
+//                .antMatchers("/post/get").hasAnyRole("ADMIN")
 //                .permitAll()
 
-                .anyRequest()
-                .authenticated();
+                .anyRequest().authenticated();
         return http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).build();
     }
 }

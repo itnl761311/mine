@@ -1,4 +1,4 @@
-package com.mine.management.user.dto;
+package com.mine.client.user.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

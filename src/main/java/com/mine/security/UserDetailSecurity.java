@@ -26,10 +26,10 @@ public class UserDetailSecurity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (user.getRoles().isEmpty()) {
-            authorities.add(new SimpleGrantedAuthority("USER"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         } else {
             for (Role role : this.user.getRoles()) {
-                authorities.add(new SimpleGrantedAuthority(role.getRole()));
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
 //				if(!group.getPermission().isEmpty() || group.getPermission() != null){
 //					for(Permission permission : group.getPermission()){
 //						authorities.add(new SimpleGrantedAuthority(permission.getUri()));

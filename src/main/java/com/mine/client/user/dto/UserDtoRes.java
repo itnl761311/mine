@@ -1,4 +1,4 @@
-package com.mine.management.user.dto;
+package com.mine.client.user.dto;
 
 import com.mine.util.Response;
 import lombok.Getter;
@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDtoRes {
-    Response response;
+public class UserDtoRes extends Response{
     String jwt;
 
 }
