@@ -49,4 +49,15 @@ public class User implements Serializable{
     public int hashCode() {
         return Objects.hash(id, email, password, name, isSendEmail);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", isSendEmail=" + isSendEmail +
+                '}';
+    }
 }
