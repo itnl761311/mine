@@ -1,10 +1,9 @@
 package com.mine.service;
 
-import com.mine.entity.Post;
 import com.mine.entity.User;
 import com.mine.jwt.JwtTokenProvider;
-import com.mine.client.user.dto.UserDtoReq;
-import com.mine.client.user.dto.UserDtoRes;
+import com.mine.client.dto.UserDtoReq;
+import com.mine.client.dto.UserDtoRes;
 import com.mine.repository.UserRepository;
 import com.mine.security.UserDetailSecurity;
 import com.mine.util.Response;
@@ -16,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserImpl implements IUser {

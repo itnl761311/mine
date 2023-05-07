@@ -1,4 +1,4 @@
-package com.mine.client.post.dto;
+package com.mine.client.dto;
 
 import com.mine.entity.Post;
 import com.mine.util.Response;

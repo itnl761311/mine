@@ -1,6 +1,6 @@
 package com.mine.management.post;
 
-import com.mine.client.post.dto.PostDtoReq;
+import com.mine.client.dto.PostDtoReq;
 import com.mine.service.IPost;
 import com.mine.service.IUser;
 import org.springframework.http.ResponseEntity;

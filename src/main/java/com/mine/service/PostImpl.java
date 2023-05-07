@@ -1,7 +1,7 @@
 package com.mine.service;
 
-import com.mine.client.post.dto.PostDtoReq;
-import com.mine.client.post.dto.PostDtoRes;
+import com.mine.client.dto.PostDtoReq;
+import com.mine.client.dto.PostDtoRes;
 import com.mine.entity.Post;
 import com.mine.entity.User;
 import com.mine.repository.PostRepository;

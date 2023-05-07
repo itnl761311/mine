@@ -1,4 +1,4 @@
-package com.mine.client.user.dto;
+package com.mine.client.dto;
 
 import com.mine.util.Response;
 import lombok.Getter;

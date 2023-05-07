@@ -1,8 +1,7 @@
-package com.mine.client.post.controller;
+package com.mine.client.controller;
 
-import com.mine.client.post.dto.PostDtoReq;
+import com.mine.client.dto.PostDtoReq;
 import com.mine.entity.User;
-import com.mine.repository.PostRepository;
 import com.mine.service.IPost;
 import com.mine.service.IUser;
 import org.springframework.http.ResponseEntity;
