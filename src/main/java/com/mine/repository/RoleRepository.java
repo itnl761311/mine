@@ -1,12 +1,12 @@
 package com.mine.repository;
 
-import com.mine.entity.User;
+import com.mine.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findUserByEmail(String email);
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Optional<Role> findRoleById(int id);
 }

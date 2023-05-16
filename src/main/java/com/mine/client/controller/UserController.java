@@ -2,6 +2,8 @@ package com.mine.client.controller;
 
 import com.mine.client.dto.UserDtoReq;
 import com.mine.service.IUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
     IUser iUser;
-
     public UserController(IUser iUser) {
         this.iUser = iUser;
     }

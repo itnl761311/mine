@@ -1,5 +1,7 @@
 package com.mine.service;
 
+import antlr.StringUtils;
+import com.mine.entity.Role;
 import com.mine.entity.User;
 import com.mine.jwt.JwtTokenProvider;
 import com.mine.client.dto.UserDtoReq;
@@ -7,6 +9,7 @@ import com.mine.client.dto.UserDtoRes;
 import com.mine.repository.UserRepository;
 import com.mine.security.UserDetailSecurity;
 import com.mine.util.Response;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +18,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+import java.util.HashSet;
+import java.util.Set;
+
+@Service(value = "main")
 public class UserImpl implements IUser {
 
     AuthenticationManager authenticationManager;
@@ -25,14 +32,16 @@ public class UserImpl implements IUser {
     PasswordEncoder passwordEncoder;
 
     UserRepository userRepository;
+    IRole iRole;
 
     IRabbitMq iRabbitMq;
 
-    public UserImpl(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PasswordEncoder passwordEncoder, UserRepository userRepository, IRabbitMq iRabbitMq) {
+    public UserImpl(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PasswordEncoder passwordEncoder, UserRepository userRepository, IRole iRole, IRabbitMq iRabbitMq) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.iRole = iRole;
         this.iRabbitMq = iRabbitMq;
 
     }
@@ -65,6 +74,7 @@ public class UserImpl implements IUser {
         return ResponseEntity.status(HttpStatus.OK).body(userDtoRes);
     }
 
+    @Transactional
     @Override
     public ResponseEntity<?> register(UserDtoReq request) {
         UserDtoRes userDtoRes = new UserDtoRes();
@@ -76,6 +86,8 @@ public class UserImpl implements IUser {
             user.setEmail(request.getEmail());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setName(request.getName());
+            userRepository.save(user);
+            setRoleDefault(user);
             userRepository.save(user);
             userDtoRes.setCode(HttpStatus.OK.value());
             userDtoRes.setMessage("Register successful");
@@ -93,5 +105,14 @@ public class UserImpl implements IUser {
     @Override
     public User findUserByEmail(String email){
         return userRepository.findUserByEmail(email);
+    }
+
+    private void setRoleDefault(User user){
+        Set<Role> setRolesDefault = new HashSet<>();
+        Role role = iRole.findRoleById(1); // idRole = 1 is the default.
+        setRolesDefault.add(role);
+        if(user != null || user.getId() != 0 || role != null){
+            user.setRoles(setRolesDefault);
+        }
     }
 }

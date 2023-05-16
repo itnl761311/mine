@@ -7,7 +7,7 @@ public interface IPost {
 
     ResponseEntity<?> get(int id);
 
-    ResponseEntity<?> getAllByUserId(PostDtoReq postDtoReq);
+    ResponseEntity<?> findAll(PostDtoReq postDtoReq);
     ResponseEntity<?> create(PostDtoReq postDtoReq);
 
 

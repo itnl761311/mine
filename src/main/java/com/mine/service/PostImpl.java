@@ -6,9 +6,11 @@ import com.mine.entity.Post;
 import com.mine.entity.User;
 import com.mine.repository.PostRepository;
 import com.mine.repository.UserRepository;
+import com.mine.util.Convenience;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,17 +39,15 @@ public class PostImpl implements IPost{
         }
         postDtoRes.setMessage("Get Post successful");
         postDtoRes.setCode(HttpStatus.OK.value());
-        postDtoRes.setPosts(Arrays.asList(post));
+        postDtoRes.setPosts(List.of(post));
 
         return ResponseEntity.status(HttpStatus.OK).body(postDtoRes);
     }
 
     @Override
-    public ResponseEntity<?> getAllByUserId(PostDtoReq postDtoReq) {
+    public ResponseEntity<?> findAll(PostDtoReq postDtoReq) {
         PostDtoRes postDtoRes = new PostDtoRes();
-        Pageable pageable = PageRequest.of(postDtoReq.getPage(),postDtoReq.getSize());
-        Page<Post> pages = postRepository.findAllByUserId(postDtoReq.getUserId(), pageable);
-
+        Page<Post> pages = postRepository.findAll(postDtoReq.getUserId(), PageRequest.of(postDtoReq.getPage(),postDtoReq.getSize(), Sort.by("id").ascending()));
         postDtoRes.setMessage("Get All Post successful");
         postDtoRes.setCode(HttpStatus.OK.value());
         postDtoRes.setPosts(pages.getContent());
@@ -55,6 +55,7 @@ public class PostImpl implements IPost{
     }
 
     @Transactional
+    @Override
     public ResponseEntity<?> create(PostDtoReq postDtoReq){
         PostDtoRes postDtoRes = new PostDtoRes();
         User user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -64,11 +65,12 @@ public class PostImpl implements IPost{
         //default post is publish
         post.setPublish(true);
         post.setUserId(user.getId());
+        post.setCreateDate(Convenience.getCurrentDate());
         Post postResult = postRepository.save(post);
 
         postDtoRes.setMessage("Create Post successful");
         postDtoRes.setCode(HttpStatus.OK.value());
-        postDtoRes.setPosts(Arrays.asList(postResult));
+        postDtoRes.setPosts(List.of(postResult));
 
         return ResponseEntity.status(HttpStatus.OK).body(postDtoRes);
     }

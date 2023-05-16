@@ -1,0 +1,55 @@
+-- learn.tbl_post definition
+
+CREATE TABLE `tbl_post` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `content` varchar(255) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `is_publish` bit(1) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- learn.tbl_role definition
+
+CREATE TABLE `tbl_role` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- learn.tbl_share_post definition
+
+CREATE TABLE `tbl_share_post` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `create_date` datetime DEFAULT NULL,
+  `post_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- learn.tbl_user definition
+
+CREATE TABLE `tbl_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `is_send_email` bit(1) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- learn.tbl_user_role definition
+
+CREATE TABLE `tbl_user_role` (
+  `user_id` int NOT NULL,
+  `role_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `FK6phlytlf1w3h9vutsu019xor5` (`role_id`),
+  CONSTRAINT `FK6phlytlf1w3h9vutsu019xor5` FOREIGN KEY (`role_id`) REFERENCES `tbl_role` (`id`),
+  CONSTRAINT `FKggc6wjqokl2vlw89y22a1j2oh` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

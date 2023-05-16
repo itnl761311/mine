@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostControllerManagement {
 
     IPost iPost;
+
     IUser iUser;
 
     public PostControllerManagement(IPost iPost, IUser iUser){
@@ -23,7 +24,7 @@ public class PostControllerManagement {
     }
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/get-all")
-    public ResponseEntity<?> getAllByUserId(@RequestBody PostDtoReq postDtoReq){
-        return iPost.getAllByUserId(postDtoReq);
+    public ResponseEntity<?> getAll(@RequestBody PostDtoReq postDtoReq){
+        return iPost.findAll(postDtoReq);
     }
 }

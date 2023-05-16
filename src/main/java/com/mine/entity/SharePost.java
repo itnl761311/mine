@@ -5,26 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_post")
-public class Post {
+@Table(name = "tbl_share_post")
+public class SharePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String title;
-    private String content;
-
-    private boolean isPublish;
-
     private Integer userId;
-
+    private Integer postId;
     private Date createDate;
 }
