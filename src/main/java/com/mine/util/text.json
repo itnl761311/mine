@@ -1,0 +1,37 @@
+{
+  "and": [
+    {
+      "and": [
+        {
+          "field": "title",
+          "operation": "must",
+          "value": "gia tri1"
+        },
+        {
+          "field": "name",
+          "operation": "should",
+          "value": "gia tri2"
+        },
+        {
+          "field": "book",
+          "operation": "should",
+          "value": "gia tri5"
+        }
+      ]
+    },
+    {
+      "and": [
+        {
+          "field": "address",
+          "operation": "must",
+          "value": "gia tri3"
+        },
+        {
+          "field": "age",
+          "operation": "should",
+          "value": "gia tri4"
+        }
+      ]
+    }
+  ]
+}

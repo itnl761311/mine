@@ -12,35 +12,35 @@ public class Convert {
     static String jsonString = "{\n" +
             "  \"and\": [\n" +
             "    {\n" +
-            "      \"and\": [\n" +
+            "      \"_and\": [\n" +
             "        {\n" +
             "          \"field\": \"title\",\n" +
-            "          \"operation\": \"must\",\n" +
-            "          \"value\": \"gia tri1\"\n" +
+            "          \"operation\": \"and\",\n" +
+            "          \"value\": \"demo of one\"\n" +
             "        },\n" +
             "        {\n" +
-            "          \"field\": \"name\",\n" +
-            "          \"operation\": \"should\",\n" +
-            "          \"value\": \"gia tri2\"\n" +
+            "          \"field\": \"content\",\n" +
+            "          \"operation\": \"and\",\n" +
+            "          \"value\": \"this is\"\n" +
             "        },\n" +
             "        {\n" +
-            "          \"field\": \"book\",\n" +
-            "          \"operation\": \"should\",\n" +
-            "          \"value\": \"gia tri5\"\n" +
+            "          \"field\": \"isPublish\",\n" +
+            "          \"operation\": \"and\",\n" +
+            "          \"value\": \"1\"\n" +
             "        }\n" +
             "      ]\n" +
             "    },\n" +
             "    {\n" +
             "      \"and\": [\n" +
             "        {\n" +
-            "          \"field\": \"address\",\n" +
-            "          \"operation\": \"must\",\n" +
-            "          \"value\": \"gia tri3\"\n" +
+            "          \"field\": \"title\",\n" +
+            "          \"operation\": \"and\",\n" +
+            "          \"value\": \"demo of two\"\n" +
             "        },\n" +
             "        {\n" +
-            "          \"field\": \"age\",\n" +
-            "          \"operation\": \"should\",\n" +
-            "          \"value\": \"gia tri4\"\n" +
+            "          \"field\": \"content\",\n" +
+            "          \"operation\": \"and\",\n" +
+            "          \"value\": \"this\"\n" +
             "        }\n" +
             "      ]\n" +
             "    }\n" +
@@ -49,7 +49,7 @@ public class Convert {
     static Gson gson = new Gson();
 
     public static Map firstConvertJsonToMap(String json) {
-        return convertJsonStringToMap(jsonString);
+        return convertJsonStringToMap(json);
     }
 
     public static Map convertJsonStringToMap(String jsonString) {
@@ -64,9 +64,16 @@ public class Convert {
         if(map.containsKey("and")){
             return buildAndFilter((List)map.get("and"));
         }
-        if(map.containsKey("or")){
-            return buildOrFilter((List)map.get("or"),((List<?>) map.get("or")).size()-1);
+        if(map.containsKey("_and")){
+            return _buildAndFilter((List)map.get("_and"));
         }
+        if(map.containsKey("or")){
+            return buildOrFilter((List)map.get("or"));
+        }
+        if(map.containsKey("_or")){
+            return _buildOrFilter((List)map.get("_or"));
+        }
+
         return null;
     }
 
@@ -78,11 +85,29 @@ public class Convert {
         return new ConditionTree.And(abs);
     }
 
-    public static ConditionTree.AbsTree buildOrFilter(List<Map> listMap, int index){
-        if(index == 0){
-            return buildFilter(listMap.get(index));
+    public static ConditionTree.AbsTree _buildAndFilter(List<Map> listMap){
+        ConditionTree.AbsTree[] abs = new ConditionTree.AbsTree[listMap.size()];
+        for(int i = 0; i<listMap.size(); i++){
+            abs[i] = buildFilter(listMap.get(i));
         }
-        return new ConditionTree.And(buildOrFilter(listMap,index), buildOrFilter(listMap,index));
+        return new ConditionTree._And(abs);
+    }
+
+
+    public static ConditionTree.AbsTree buildOrFilter(List<Map> listMap){
+        ConditionTree.AbsTree[] abs = new ConditionTree.AbsTree[listMap.size()];
+        for(int i = 0; i<listMap.size(); i++){
+            abs[i] = buildFilter(listMap.get(i));
+        }
+        return new ConditionTree.Or(abs);
+    }
+
+    public static ConditionTree.AbsTree _buildOrFilter(List<Map> listMap){
+        ConditionTree.AbsTree[] abs = new ConditionTree.AbsTree[listMap.size()];
+        for(int i = 0; i<listMap.size(); i++){
+            abs[i] = buildFilter(listMap.get(i));
+        }
+        return new ConditionTree._Or(abs);
     }
 
     public static void main(String[] args) {

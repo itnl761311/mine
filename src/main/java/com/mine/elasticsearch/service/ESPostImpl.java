@@ -2,43 +2,44 @@ package com.mine.elasticsearch.service;
 
 import com.mine.elasticsearch.entity.ESPost;
 import com.mine.elasticsearch.repository.IESPostRepository;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import com.mine.elasticsearch.repository.defination.IESPostDefinitionRepository;
+import com.mine.util.binarytree.ConditionTree;
+import com.mine.util.elasticsearch.Convert;
+import com.mine.util.elasticsearch.VisitNode;
+
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import java.util.Map;
 
 @Service
 public class ESPostImpl implements IESPost {
-
+    ElasticsearchOperations operations;
     IESPostRepository postRepository;
-    public ESPostImpl(IESPostRepository postRepository){
+    IESPostDefinitionRepository iesPostDefinitionRepository;
+    public ESPostImpl(ElasticsearchOperations operations, IESPostRepository postRepository, IESPostDefinitionRepository iesPostDefinitionRepository){
+        this.operations = operations;
         this.postRepository = postRepository;
+        this.iesPostDefinitionRepository = iesPostDefinitionRepository;
     }
     @Override
     public ESPost getPostById(String id) {
-//        List<ESPost> posts = new ArrayList<>();
-//        Criteria criteria = new Criteria("title").is("").and("content").is(new Criteria().contains(""));
-//        Query query = new CriteriaQuery(criteria);
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(BoolQueryBuilder.parseInnerQueryBuilder(query));
-//        NativeSearchQuery build = new NativeSearchQueryBuilder().withQuery(matchAllQuery()).build();
-
-//        operations.search(qr, ESPost.class).getSearchHits().forEach(searchHit -> {
-//            posts.add(searchHit.getContent());
-//        });
         return postRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<ESPost> findESPostByTitleAndContent(String title, String content) {
-        Criteria criteria = new Criteria("title").is(title);
-        Criteria criteria1 = new Criteria().and(criteria);
-        Query query = new CriteriaQuery(criteria);
-        return postRepository.findByTitleAndContent(title,content,query);
+    public List<ESPost> searchESPost(String stringJson) {
+        Query query = buildQuery(stringJson);
+        return iesPostDefinitionRepository.searchAll(query,operations);
+    }
+
+    public Query buildQuery(String stringJson){
+        Map map = Convert.firstConvertJsonToMap(stringJson);
+        ConditionTree.AbsTree absTree = Convert.buildFilter(map);
+        VisitNode node = new VisitNode();
+        Criteria visit = node.visit(absTree);
+        return new CriteriaQuery(visit);
     }
 }

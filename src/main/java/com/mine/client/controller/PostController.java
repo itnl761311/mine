@@ -34,7 +34,7 @@ public class PostController {
     public ResponseEntity<?> getAll(@RequestBody PostDtoReq postDtoReq){
         User user = iUser.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         postDtoReq.setUserId(user.getId());
-        return iPost.findAll(postDtoReq);
+        return iPost.findAllByUserId(postDtoReq);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -42,6 +42,5 @@ public class PostController {
     public ResponseEntity<?> createPost(@RequestBody PostDtoReq postDtoReq){
         return iPost.create(postDtoReq);
     }
-
 
 }

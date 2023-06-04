@@ -7,8 +7,10 @@ public interface IPost {
 
     ResponseEntity<?> get(int id);
 
-    ResponseEntity<?> findAll(PostDtoReq postDtoReq);
+    ResponseEntity<?> findAllByUserId(PostDtoReq postDtoReq);
     ResponseEntity<?> create(PostDtoReq postDtoReq);
+
+    ResponseEntity<?> searchPostByCondition(String condition);
 
 
 }

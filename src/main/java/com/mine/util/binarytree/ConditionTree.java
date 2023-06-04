@@ -35,9 +35,32 @@ public class ConditionTree {
         }
     }
 
+    public static class _Or extends AbsTree {
+        private final AbsTree[] node;
+
+        public _Or(AbsTree... node) {
+            this.node = this.removeNullValue(node);
+        }
+
+        public AbsTree[] getNode() {
+            return node;
+        }
+    }
+
     public static class And extends AbsTree {
         private final AbsTree[] node;
         public And(AbsTree... node) {
+            this.node = this.removeNullValue(node);
+        }
+
+        public AbsTree[] getNode() {
+            return node;
+        }
+    }
+
+    public static class _And extends AbsTree {
+        private final AbsTree[] node;
+        public _And(AbsTree... node) {
             this.node = this.removeNullValue(node);
         }
 

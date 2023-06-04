@@ -6,6 +6,7 @@ import com.mine.entity.Post;
 import com.mine.entity.User;
 import com.mine.repository.PostRepository;
 import com.mine.repository.UserRepository;
+import com.mine.repository.defination.IPostRepository;
 import com.mine.util.Convenience;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,15 +18,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Service
 public class PostImpl implements IPost{
     PostRepository postRepository;
     UserRepository userRepository;
-    public PostImpl(PostRepository postRepository, UserRepository userRepository){
+    IPostRepository iPostRepository;
+
+    EntityManager entityManager;
+    public PostImpl(PostRepository postRepository, UserRepository userRepository, IPostRepository iPostRepository, EntityManager entityManager){
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.iPostRepository = iPostRepository;
+        this.entityManager = entityManager;
     }
     @Override
     public ResponseEntity<?> get(int id) {
@@ -45,9 +52,9 @@ public class PostImpl implements IPost{
     }
 
     @Override
-    public ResponseEntity<?> findAll(PostDtoReq postDtoReq) {
+    public ResponseEntity<?> findAllByUserId(PostDtoReq postDtoReq) {
         PostDtoRes postDtoRes = new PostDtoRes();
-        Page<Post> pages = postRepository.findAll(postDtoReq.getUserId(), PageRequest.of(postDtoReq.getPage(),postDtoReq.getSize(), Sort.by("id").ascending()));
+        Page<Post> pages = postRepository.findAllByUserId(postDtoReq.getUserId(), PageRequest.of(postDtoReq.getPage(),postDtoReq.getSize(), Sort.by("id").ascending()));
         postDtoRes.setMessage("Get All Post successful");
         postDtoRes.setCode(HttpStatus.OK.value());
         postDtoRes.setPosts(pages.getContent());
@@ -72,6 +79,14 @@ public class PostImpl implements IPost{
         postDtoRes.setCode(HttpStatus.OK.value());
         postDtoRes.setPosts(List.of(postResult));
 
+        return ResponseEntity.status(HttpStatus.OK).body(postDtoRes);
+    }
+
+    @Override
+    public ResponseEntity<?> searchPostByCondition(String condition) {
+        PostDtoRes postDtoRes = new PostDtoRes();
+        List<Post> posts = iPostRepository.searchPostByCondition(condition,entityManager);
+        postDtoRes.setPosts(posts);
         return ResponseEntity.status(HttpStatus.OK).body(postDtoRes);
     }
 }
