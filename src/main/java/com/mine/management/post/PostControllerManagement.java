@@ -25,6 +25,6 @@ public class PostControllerManagement {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/get-all")
     public ResponseEntity<?> getAll(@RequestBody PostDtoReq postDtoReq){
-        return iPost.findAll(postDtoReq);
+        return iPost.findAllByUserId(postDtoReq);
     }
 }
